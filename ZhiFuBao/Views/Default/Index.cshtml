@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>电脑扫码支付</h1>
+<div>
+    <table style="border:1px solid groove red">
+        <tr style="border:1px solid groove red">
+            <td>订单名称:</td>
+            <td><input type="text" width="200" id="orderName" , value=""></td>
+        </tr>
+        <tr style="border:1px solid groove red">
+            <td>付款金额:</td>
+            <td><input type="text" width="200" id="count" value=""></td>
+        </tr>
+        <tr style="border:1px solid groove red">
+            <td>商品描述:</td>
+            <td><input type="text" width="200" id="goodsMs" value=""></td>
+        </tr>
+        <tr style="border:1px solid groove red">
+            <td colspan="2"><input type="button" width="500" id="btnPay" value="付款"></td>
+        </tr>
+
+    </table>
+</div>
+@section Scripts
+    {
+    <script type="text/javascript">$().ready(function () {
+            $("#btnPay").click(function () {
+                var orderName = $("#orderName").val();
+                var count = $("#count").val();
+                var goodsMs = $("#goodsMs").val();
+
+                var dataObj = {
+                    "OrderName": orderName,
+                    "Count": count,
+                    "GoodsMs": goodsMs
+                };
+                console.log(dataObj)
+                $.ajax({
+                    cache: false,
+                    type: "Post",
+                    data: { "Order": dataObj},
+                    url: "/Default/Show",
+                    success: function (data)
+                    {
+                         //跳转支付宝沙箱扫码的页面
+                        window.location.replace(data.pay_url);
+                    },
+                    error: function (data)
+                    {
+                        console.log(data)
+                        alert('失败!');
+                    }
+
+                })
+            })
+        });</script>
+}
